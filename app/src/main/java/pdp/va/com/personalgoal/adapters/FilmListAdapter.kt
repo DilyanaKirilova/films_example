@@ -8,11 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import pdp.va.com.personalgoal.databinding.ListItemFilmBinding
 import pdp.va.com.personalgoal.models.Film
 
-class FilmListAdapter : ListAdapter<Film, FilmListAdapter.ViewHolder>(FilmDiffCallback()) {
+class FilmListAdapter constructor(private val itemClickListener: OnItemClickListener) : ListAdapter<Film, FilmListAdapter.ViewHolder>(FilmDiffCallback()) {
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val film = getItem(position)
-        holder.apply { bind(createOnClickListener(film.filmId), film)
-            itemView.tag = film}
+        holder.apply {
+            bind(createOnClickListener(film.filmId), film)
+            itemView.tag = film
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -21,12 +24,12 @@ class FilmListAdapter : ListAdapter<Film, FilmListAdapter.ViewHolder>(FilmDiffCa
 
     private fun createOnClickListener(id: Int): View.OnClickListener {
         return View.OnClickListener {
-            //TODO
+            itemClickListener.onItemClick(id)
         }
     }
 
     class ViewHolder(
-        private val binding: ListItemFilmBinding
+            private val binding: ListItemFilmBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(listener: View.OnClickListener, item: Film) {
@@ -36,5 +39,9 @@ class FilmListAdapter : ListAdapter<Film, FilmListAdapter.ViewHolder>(FilmDiffCa
                 executePendingBindings()
             }
         }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(id: Int)
     }
 }
