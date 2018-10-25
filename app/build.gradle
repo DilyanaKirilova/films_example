@@ -53,6 +53,6 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espressoVersion"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$rootProject.uiAutomatorVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
-    compile "org.jetbrains.kotlin:kotlin-reflect:1.3.0-rc-146"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.0-rc-146"
 }
 

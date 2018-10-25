@@ -1,5 +1,6 @@
 package pdp.va.com.personalgoal.views
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import kotlinx.android.synthetic.main.films_list_fragment.*
 import pdp.va.com.personalgoal.DIUtils
 import pdp.va.com.personalgoal.adapters.FilmListAdapter
 import pdp.va.com.personalgoal.adapters.FilmListAdapter.OnItemClickListener
@@ -43,6 +49,11 @@ class FilmsListFragment : Fragment() {
 
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    @SuppressLint("WrongConstant")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        film_list.layoutManager = StaggeredGridLayoutManager (2, LinearLayoutManager.VERTICAL)
     }
 
     private fun subscribeUi(adapter: FilmListAdapter) {
