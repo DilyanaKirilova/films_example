@@ -9,16 +9,16 @@ import pdp.va.com.personalgoal.repository.FilmRepository
 
 class FilmDetailsViewModel internal constructor(
         private val filmRepository: FilmRepository,
-        private val filmId: Int)
+        private val id: Int)
     : ViewModel() {
 
     private val film = MediatorLiveData<Film>()
 
     init {
-        film.addSource(filmRepository.getFilm(filmId), film::setValue)
+        film.addSource(filmRepository.getFilm(id), film::setValue)
     }
 
-    fun getFilm() :LiveData<Film>{
+    fun getFilm(): LiveData<Film> {
         return film
     }
 }

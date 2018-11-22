@@ -2,14 +2,39 @@ package pdp.va.com.personalgoal.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
-@Entity (tableName = "films")
+@Entity(tableName = "films")
 data class Film(
-    @PrimaryKey(autoGenerate = true) val filmId: Int = 1,
-    val name : String,
-    val genre : String,
-    val country : String,
-    val director : String,
-    val year : Int,
-    val imageUrl : String
-)
+        @SerializedName("vote_count")
+        var voteCount: Int,
+        @PrimaryKey
+        @SerializedName("id")
+        var id: Int,
+        @SerializedName("video")
+        var video: Boolean,
+        @SerializedName("vote_average")
+        var voteAverage: Double,
+        @SerializedName("title")
+        var title: String,
+        @SerializedName("popularity")
+        var popularity: Double,
+        @SerializedName("poster_path")
+        var posterPath: String,
+        @SerializedName("original_language")
+        var originalLanguage: String,
+        @SerializedName("original_title")
+        var originalTitle: String,
+        @SerializedName("backdrop_path")
+        var backdropPath: String,
+        @SerializedName("adult")
+        var adult: Boolean,
+        @SerializedName("overview")
+        var overview: String,
+        @SerializedName("release_date")
+        var releaseDate: String
+) {
+    override fun toString(): String {
+        return "Film(voteCount=$voteCount, id=$id, video=$video, voteAverage=$voteAverage, title='$title', popularity=$popularity, posterPath='$posterPath', originalLanguage='$originalLanguage', originalTitle='$originalTitle', backdropPath='$backdropPath', adult=$adult, overview='$overview', releaseDate='$releaseDate')"
+    }
+}

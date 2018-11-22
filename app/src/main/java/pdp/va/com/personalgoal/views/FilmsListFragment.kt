@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import kotlinx.android.synthetic.main.films_list_fragment.*
 import pdp.va.com.personalgoal.DIUtils
@@ -28,9 +26,9 @@ class FilmsListFragment : Fragment() {
     private lateinit var viewModel: FilmListViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         val binding = FilmsListFragmentBinding.inflate(inflater, container, false)
         val context = context ?: return binding.root
@@ -38,7 +36,7 @@ class FilmsListFragment : Fragment() {
         val factory = DIUtils.getFilmListViewModelFactory(context)
         viewModel = ViewModelProviders.of(this, factory).get(FilmListViewModel::class.java)
 
-        val itemCLick = object : OnItemClickListener  {
+        val itemCLick = object : OnItemClickListener {
             override fun onItemClick(id: Int) {
                 (activity as MainActivity).addFragment(FilmDetailsFragment.newInstance(id))
             }
@@ -53,7 +51,7 @@ class FilmsListFragment : Fragment() {
 
     @SuppressLint("WrongConstant")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        film_list.layoutManager = StaggeredGridLayoutManager (2, LinearLayoutManager.VERTICAL)
+        film_list.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
     }
 
     private fun subscribeUi(adapter: FilmListAdapter) {

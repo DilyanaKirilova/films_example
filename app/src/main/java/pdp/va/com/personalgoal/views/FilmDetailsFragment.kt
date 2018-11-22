@@ -14,10 +14,10 @@ import pdp.va.com.personalgoal.viewmodels.FilmDetailsViewModel
 class FilmDetailsFragment  : Fragment() {
 
     companion object {
-        fun newInstance(filmId : Int) : FilmDetailsFragment{
+        fun newInstance(id : Int) : FilmDetailsFragment{
             val fragment = FilmDetailsFragment()
             val args = Bundle()
-            args.putInt("FILM_ID", filmId)
+            args.putInt("FILM_ID", id)
             fragment.arguments = args
             return fragment
         }
@@ -26,14 +26,14 @@ class FilmDetailsFragment  : Fragment() {
     private lateinit var viewModel: FilmDetailsViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var filmId = 1
-        if (arguments!!.containsKey("filmId")) {
-            filmId = arguments!!.getInt("filmId")
+        var id = 1
+        if (arguments!!.containsKey("id")) {
+            id = arguments!!.getInt("id")
         }
 
         val binding = FilmDetailsFragmentBinding.inflate(inflater, container, false)
         val context = context ?: return binding.root
-        val factory = DIUtils.getFilmDetailsViewModelFactory(context, filmId)
+        val factory = DIUtils.getFilmDetailsViewModelFactory(context, id)
         viewModel = ViewModelProviders.of(this, factory).get(FilmDetailsViewModel::class.java)
 
         viewModel.getFilm().observe(this, Observer { film ->

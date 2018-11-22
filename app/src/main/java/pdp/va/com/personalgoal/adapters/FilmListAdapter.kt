@@ -13,7 +13,7 @@ class FilmListAdapter constructor(private val itemClickListener: OnItemClickList
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val film = getItem(position)
         holder.apply {
-            bind(createOnClickListener(film.filmId), film)
+            bind(createOnClickListener(film.id), film)
             itemView.tag = film
         }
     }
@@ -32,10 +32,10 @@ class FilmListAdapter constructor(private val itemClickListener: OnItemClickList
             private val binding: ListItemFilmBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(listener: View.OnClickListener, item: Film) {
+        fun bind(listener: View.OnClickListener, film: Film) {
             binding.apply {
                 clickListener = listener
-                film = item
+                this.film = film
                 executePendingBindings()
             }
         }

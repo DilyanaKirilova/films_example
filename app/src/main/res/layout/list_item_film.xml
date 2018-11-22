@@ -22,7 +22,7 @@
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:scaleType="centerCrop"
-                app:imageFromUrl="@{film.imageUrl}"
+                app:imageFromUrl="@{film.posterPath}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -31,7 +31,7 @@
                 android:id="@+id/film_item_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{film.name}"
+                android:text="@{film.title}"
                 android:background="@android:color/white"
                 android:textAppearance="?attr/textAppearanceListItem"
                 app:layout_constraintEnd_toEndOf="parent"
