@@ -7,9 +7,10 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
 @BindingAdapter("imageFromUrl")
 fun bindImageFromUrl(view: ImageView, posterPath: String?) {
+    val IMAGE_URL = "http://image.tmdb.org/t/p/w185/";
     if (!posterPath.isNullOrEmpty()) {
         Glide.with(view.context)
-                .load(posterPath)
+                .load(IMAGE_URL + posterPath)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(view)
     }

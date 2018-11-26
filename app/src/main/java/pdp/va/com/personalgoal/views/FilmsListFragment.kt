@@ -1,7 +1,9 @@
 package pdp.va.com.personalgoal.views
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +12,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.films_list_fragment.*
 import pdp.va.com.personalgoal.DIUtils
 import pdp.va.com.personalgoal.adapters.FilmListAdapter
 import pdp.va.com.personalgoal.adapters.FilmListAdapter.OnItemClickListener
+import pdp.va.com.personalgoal.database.AppDatabase
 import pdp.va.com.personalgoal.databinding.FilmsListFragmentBinding
+import pdp.va.com.personalgoal.models.Result
+import pdp.va.com.personalgoal.retrofit.IFilmAPI
+import pdp.va.com.personalgoal.retrofit.RetrofitClient
 import pdp.va.com.personalgoal.viewmodels.FilmListViewModel
 
 class FilmsListFragment : Fragment() {
@@ -24,6 +33,13 @@ class FilmsListFragment : Fragment() {
     }
 
     private lateinit var viewModel: FilmListViewModel
+    private var movieAPI: IFilmAPI? = null
+    private val compositeDisposable = CompositeDisposable()
+
+    init {
+        val retrofit = RetrofitClient.getInstance()
+        movieAPI = retrofit?.create(IFilmAPI::class.java)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -42,11 +58,30 @@ class FilmsListFragment : Fragment() {
             }
         }
         val adapter = FilmListAdapter(itemCLick)
+        fetchData(binding.root)
         binding.filmList.adapter = adapter
         subscribeUi(adapter)
 
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun fetchData(view: View) {
+        movieAPI!!.getUpcoming()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribeWith(object : DisposableObserver<Result>() {
+                    override fun onNext(result: pdp.va.com.personalgoal.models.Result) {
+                        AppDatabase.getInstance(context)?.filmDao()?.insertAllFilms(result.movies)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.e(TAG, "Error seeding database", e)
+                    }
+
+                    override fun onComplete() {
+                    }
+                })?.let { compositeDisposable.add(it) }
     }
 
     @SuppressLint("WrongConstant")
@@ -60,4 +95,7 @@ class FilmsListFragment : Fragment() {
         })
     }
 
+    private fun showProgressBar(showProgressBar: Boolean) {
+        progress_bar.setVisibility(View.VISIBLE)
+    }
 }

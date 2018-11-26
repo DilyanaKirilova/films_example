@@ -8,14 +8,14 @@ import androidx.room.Query
 
 @Dao
 interface FilmDao {
-    @Query("SELECT * FROM films ORDER BY title")
+    @Query("SELECT * FROM films")
     fun getFilms(): LiveData<List<Film>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(film: Film)
+    fun insertFilm(film: Film)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(films: List<Film>)
+    fun insertAllFilms(films: List<Film>)
 
     @Query("SELECT * FROM films WHERE id =:id")
     fun getFilm(id: Int): LiveData<Film>

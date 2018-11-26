@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Films</string>
+    <string name="title">Title:</string>
+    <string name="releaseDate">Release date:</string>
+    <string name="overview">Description:</string>
+    <string name="language">Language:</string>
+    <string name="reviews">Reviews:</string>
+    <string name="seeMore"><![CDATA[see more >>]]></string>
 </resources>

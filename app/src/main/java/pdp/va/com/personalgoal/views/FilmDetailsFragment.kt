@@ -4,20 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.reviews_list.view.*
 import pdp.va.com.personalgoal.DIUtils
+import pdp.va.com.personalgoal.R
+import pdp.va.com.personalgoal.adapters.ReviewListAdapter
 import pdp.va.com.personalgoal.databinding.FilmDetailsFragmentBinding
 import pdp.va.com.personalgoal.viewmodels.FilmDetailsViewModel
 
-class FilmDetailsFragment  : Fragment() {
+class FilmDetailsFragment : Fragment() {
 
     companion object {
-        fun newInstance(id : Int) : FilmDetailsFragment{
+        private val KEY_ID: String = "KEY_ID"
+        fun newInstance(id: Int): FilmDetailsFragment {
             val fragment = FilmDetailsFragment()
             val args = Bundle()
-            args.putInt("FILM_ID", id)
+            args.putInt(KEY_ID, id)
             fragment.arguments = args
             return fragment
         }
@@ -27,8 +33,8 @@ class FilmDetailsFragment  : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var id = 1
-        if (arguments!!.containsKey("id")) {
-            id = arguments!!.getInt("id")
+        if (arguments!!.containsKey(KEY_ID)) {
+            id = arguments!!.getInt(KEY_ID)
         }
 
         val binding = FilmDetailsFragmentBinding.inflate(inflater, container, false)
@@ -41,6 +47,28 @@ class FilmDetailsFragment  : Fragment() {
         })
 
         return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        subscribeUi()
+    }
+
+    private fun subscribeUi() {
+        val adapter = ReviewListAdapter()
+        viewModel.getReviews().observe(this, Observer { reviews ->
+            if (reviews != null) adapter.submitList(reviews)
+            showAlertDialog(adapter)
+        })
+    }
+
+    private fun showAlertDialog(adapter: ReviewListAdapter) {
+        val builder = AlertDialog.Builder(context!!).create()
+        val layout = this.layoutInflater.inflate(R.layout.reviews_list, null)
+        builder.setView(layout)
+        layout.reviews_recycler_view.layoutManager = LinearLayoutManager(context)
+        layout.reviews_recycler_view.adapter = adapter
+        builder.setTitle(R.string.reviews)
+        builder.show()
     }
 }

@@ -33,8 +33,4 @@ data class Film(
         var overview: String,
         @SerializedName("release_date")
         var releaseDate: String
-) {
-    override fun toString(): String {
-        return "Film(voteCount=$voteCount, id=$id, video=$video, voteAverage=$voteAverage, title='$title', popularity=$popularity, posterPath='$posterPath', originalLanguage='$originalLanguage', originalTitle='$originalTitle', backdropPath='$backdropPath', adult=$adult, overview='$overview', releaseDate='$releaseDate')"
-    }
-}
+)
