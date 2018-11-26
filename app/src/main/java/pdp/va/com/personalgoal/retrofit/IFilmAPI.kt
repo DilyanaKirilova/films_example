@@ -1,6 +1,7 @@
 package pdp.va.com.personalgoal.retrofit
 
 import io.reactivex.Observable
+import io.reactivex.Single
 import pdp.va.com.personalgoal.models.PageReviews
 import pdp.va.com.personalgoal.models.Result
 import pdp.va.com.personalgoal.retrofit.APIConstants.Companion.FILM_REVIEWS
@@ -14,17 +15,17 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 
-public interface IFilmAPI {
+interface IFilmAPI {
 
     @GET(TOP_RATED + FIRST_PARAM_API_KEY + SECOND_PARAM_LANGUAGE + THIRD_PARAM_PAGE)
-    abstract fun getTopRated(): Observable<Result>
+    fun getTopRated(): Observable<Result>
 
     @GET(POPULAR + FIRST_PARAM_API_KEY + SECOND_PARAM_LANGUAGE + THIRD_PARAM_PAGE)
-    abstract fun getPopular(): Observable<Result>
+    fun getPopular(): Observable<Result>
 
     @GET(UPCOMING + FIRST_PARAM_API_KEY + SECOND_PARAM_LANGUAGE + THIRD_PARAM_PAGE)
-    abstract fun getUpcoming(): Observable<Result>
+    fun getUpcoming(): Observable<Result>
 
     @GET(FILM_REVIEWS + FIRST_PARAM_API_KEY + SECOND_PARAM_LANGUAGE + THIRD_PARAM_PAGE)
-    abstract fun getFilmReviews(@Path("movie_id") id: Int): Observable<PageReviews>
+    fun getFilmReviews(@Path("movie_id") id: Int): Single<PageReviews>
 }

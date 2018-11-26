@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import pdp.va.com.personalgoal.models.Film
+import pdp.va.com.personalgoal.models.Response
 import pdp.va.com.personalgoal.models.Review
 import pdp.va.com.personalgoal.repository.FilmRepository
 
@@ -14,7 +15,7 @@ class FilmDetailsViewModel internal constructor(
     : ViewModel() {
 
     private val film = MediatorLiveData<Film>()
-    private val reviews = MediatorLiveData<List<Review>>()
+    private val reviews = MediatorLiveData<Response<List<Review>>>()
 
     init {
         film.addSource(filmRepository.getFilm(id), film::setValue)
@@ -25,7 +26,7 @@ class FilmDetailsViewModel internal constructor(
         return film
     }
 
-    fun getReviews(): LiveData<List<Review>> {
+    fun getReviews(): LiveData<Response<List<Review>>> {
         return reviews
     }
 }

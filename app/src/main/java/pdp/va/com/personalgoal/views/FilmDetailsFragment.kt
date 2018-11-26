@@ -14,6 +14,7 @@ import pdp.va.com.personalgoal.DIUtils
 import pdp.va.com.personalgoal.R
 import pdp.va.com.personalgoal.adapters.ReviewListAdapter
 import pdp.va.com.personalgoal.databinding.FilmDetailsFragmentBinding
+import pdp.va.com.personalgoal.models.Status
 import pdp.va.com.personalgoal.viewmodels.FilmDetailsViewModel
 
 class FilmDetailsFragment : Fragment() {
@@ -56,9 +57,16 @@ class FilmDetailsFragment : Fragment() {
 
     private fun subscribeUi() {
         val adapter = ReviewListAdapter()
-        viewModel.getReviews().observe(this, Observer { reviews ->
-            if (reviews != null) adapter.submitList(reviews)
-            showAlertDialog(adapter)
+        viewModel.getReviews().observe(this, Observer { response ->
+            when (response.status) {
+                Status.LOADING -> {}//TODO loading state
+                    Status.SUCCESS -> {
+                    adapter.submitList(response.data)
+                    showAlertDialog(adapter)
+                }
+                Status.ERROR -> {}// TODO error state /hide loading
+
+            }
         })
     }
 
