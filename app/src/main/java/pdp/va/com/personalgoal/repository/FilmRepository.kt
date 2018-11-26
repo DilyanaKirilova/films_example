@@ -31,7 +31,7 @@ class FilmRepository private constructor(private val filmDao: FilmDao, private v
     fun getFilm(id: Int) = filmDao.getFilm(id)
 
     fun getReviews(id: Int): LiveData<List<Review>> {
-        var liveReview: MutableLiveData<List<Review>> = MutableLiveData()
+        val liveReview: MutableLiveData<List<Review>> = MutableLiveData()
         filmAPI.getFilmReviews(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
