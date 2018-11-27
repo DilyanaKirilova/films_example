@@ -1,5 +1,8 @@
 package pdp.va.com.personalgoal.views
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +12,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.film_details_fragment.*
 import kotlinx.android.synthetic.main.reviews_list.view.*
 import pdp.va.com.personalgoal.DIUtils
 import pdp.va.com.personalgoal.R
 import pdp.va.com.personalgoal.adapters.ReviewListAdapter
 import pdp.va.com.personalgoal.databinding.FilmDetailsFragmentBinding
 import pdp.va.com.personalgoal.models.Status
+import pdp.va.com.personalgoal.network.NetworkUtil.Companion.isNetworkAvailable
 import pdp.va.com.personalgoal.viewmodels.FilmDetailsViewModel
+
 
 class FilmDetailsFragment : Fragment() {
 
@@ -52,20 +59,37 @@ class FilmDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        subscribeUi()
+        see_film_reviews.setOnClickListener { v ->
+            if (!isNetworkAvailable(context!!)) {
+                showSnackBarMessage("Please check your internet connection.")
+            } else {
+                showProgressBar()
+                subscribeUi()
+            }
+        }
     }
 
     private fun subscribeUi() {
         val adapter = ReviewListAdapter()
         viewModel.getReviews().observe(this, Observer { response ->
             when (response.status) {
-                Status.LOADING -> {}//TODO loading state
-                    Status.SUCCESS -> {
-                    adapter.submitList(response.data)
-                    showAlertDialog(adapter)
+                Status.LOADING -> {
+                    showProgressBar()
                 }
-                Status.ERROR -> {}// TODO error state /hide loading
+                Status.SUCCESS -> {
+                    hideProgressBar()
+                    if (response.data!!.isEmpty()) {
+                        showSnackBarMessage("There are no reviews for this film.")
+                    } else {
+                        adapter.submitList(response.data)
+                        showAlertDialog(adapter)
+                    }
 
+                }
+                Status.ERROR -> {
+                    hideProgressBar()
+                    showSnackBarMessage("Something went wrong. Please try again later.")
+                }
             }
         })
     }
@@ -78,5 +102,18 @@ class FilmDetailsFragment : Fragment() {
         layout.reviews_recycler_view.adapter = adapter
         builder.setTitle(R.string.reviews)
         builder.show()
+    }
+
+    private fun showProgressBar() {
+        progress_bar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        progress_bar.visibility = View.GONE
+        see_film_reviews.visibility = View.VISIBLE
+    }
+
+    private fun showSnackBarMessage(message: String) {
+        Snackbar.make(getActivity()!!.layout, message, Snackbar.LENGTH_LONG).show()
     }
 }

@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="review"
             type="pdp.va.com.personalgoal.models.Review" />
@@ -12,33 +13,51 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:layout_margin="10dp"
+        android:layout_marginBottom="15dp">
 
         <TextView
-            android:id="@+id/review_author"
-            android:layout_width="0dp"
+            android:id="@+id/review_author_label"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/light_grey"
-            android:gravity="center"
-            android:text="@{review.author}"
+            android:text="@string/author"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textSize="20sp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/review_content"
-            android:layout_width="0dp"
+            android:id="@+id/review_author_value"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/light_grey"
+            android:layout_marginStart="5dp"
             android:gravity="center"
+            android:text="@{review.author}"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@+id/review_author_label" />
+
+        <TextView
+            android:id="@+id/review_content_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/review_author_value" />
+
+        <TextView
+            android:id="@+id/review_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@{review.content}"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/review_author" />
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@+id/review_content_label" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

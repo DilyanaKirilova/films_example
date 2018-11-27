@@ -6,4 +6,7 @@
     <string name="language">Language:</string>
     <string name="reviews">Reviews:</string>
     <string name="seeMore"><![CDATA[see more >>]]></string>
+    <string name="image">image</string>
+    <string name="author">Author:</string>
+    <string name="review">Review:</string>
 </resources>

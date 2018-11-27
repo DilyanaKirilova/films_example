@@ -96,6 +96,6 @@ class FilmsListFragment : Fragment() {
     }
 
     private fun showProgressBar(showProgressBar: Boolean) {
-        progress_bar.setVisibility(View.VISIBLE)
+        films_list_progress_bar.setVisibility(View.VISIBLE)
     }
 }
