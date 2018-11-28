@@ -10,7 +10,7 @@ class Response<D> private constructor(val status: Status, val data: D?, val erro
             return Response(Status.LOADING, null, null)
         }
 
-        fun <D> success(data: D): Response<D> {
+        fun <D> success(data: D?): Response<D> {
             return Response(Status.SUCCESS, data, null)
         }
 

@@ -1,6 +1,7 @@
 package pdp.va.com.personalgoal
 
 import android.content.Context
+import android.net.ConnectivityManager
 import pdp.va.com.personalgoal.database.AppDatabase
 import pdp.va.com.personalgoal.repository.FilmRepository
 import pdp.va.com.personalgoal.repository.FilmRepository.Companion.getInstance
@@ -12,7 +13,7 @@ import pdp.va.com.personalgoal.viewmodels.FilmsListViewModelFactory
 object DIUtils {
 
     private fun getFilmRepository(context: Context): FilmRepository {
-        return getInstance(AppDatabase.getInstance(context)!!.filmDao(), getFilmAPI(), context)
+        return getInstance(AppDatabase.getInstance(context)!!.filmDao(), getFilmAPI(), getNetworkManager(context))
     }
 
     private fun getFilmAPI(): IFilmAPI {
@@ -27,4 +28,7 @@ object DIUtils {
     fun getFilmDetailsViewModelFactory(context: Context, id: Int): FilmDetailsViewModelFactory {
         return FilmDetailsViewModelFactory(getFilmRepository(context), id)
     }
+
+    private fun getNetworkManager(context : Context) = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
 }

@@ -111,6 +111,6 @@ class FilmDetailsFragment : Fragment() {
     }
 
     private fun showSnackBarMessage(message: String) {
-        Snackbar.make(getActivity()!!.layout, message, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(getActivity()!!.details_layout, message, Snackbar.LENGTH_LONG).show()
     }
 }

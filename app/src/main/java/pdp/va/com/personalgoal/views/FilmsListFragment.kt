@@ -10,11 +10,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.film_details_fragment.*
 import kotlinx.android.synthetic.main.films_list_fragment.*
 import pdp.va.com.personalgoal.DIUtils
 import pdp.va.com.personalgoal.adapters.FilmListAdapter
 import pdp.va.com.personalgoal.adapters.FilmListAdapter.OnItemClickListener
 import pdp.va.com.personalgoal.databinding.FilmsListFragmentBinding
+import pdp.va.com.personalgoal.models.Status
 import pdp.va.com.personalgoal.viewmodels.FilmListViewModel
 
 class FilmsListFragment : Fragment() {
@@ -55,12 +58,37 @@ class FilmsListFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: FilmListAdapter) {
-        viewModel.getFilms().observe(this, Observer { films ->
-            if (films != null) adapter.submitList(films)
+        viewModel.getFilms(this).observe(this, Observer { response ->
+            when (response.status) {
+                Status.LOADING -> {
+                    showProgressBar()
+                }
+                Status.SUCCESS -> {
+                    hideProgressBar()
+                    if (response.data!!.isEmpty()) {
+                        showSnackBarMessage("There are no films to display")
+                    } else {
+                        adapter.submitList(response.data)
+                    }
+                }
+                Status.ERROR -> {
+                    hideProgressBar()
+                    showSnackBarMessage("Something went wrong. Please try again later.")
+                }
+            }
         })
     }
 
-    private fun showProgressBar(showProgressBar: Boolean) {
-        films_list_progress_bar.setVisibility(View.VISIBLE)
+    private fun showProgressBar() {
+        films_list_progress_bar.visibility = View.VISIBLE
     }
+
+    private fun hideProgressBar() {
+        films_list_progress_bar.visibility = View.GONE
+    }
+
+    private fun showSnackBarMessage(message: String) {
+        Snackbar.make(getActivity()!!.list_layout, message, Snackbar.LENGTH_LONG).show()
+    }
+
 }

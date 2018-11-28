@@ -12,18 +12,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.container, FilmsListFragment.newInstance())
-                .commitNow()
+            addFragment(FilmsListFragment.newInstance())
         }
     }
 
-    fun addFragment(fragment: Fragment){
+    fun addFragment(fragment: Fragment) {
         Log.i("Adding new fragment", "fragment")
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment, fragment::class.java.simpleName)
+                .add(R.id.container, fragment, fragment::class.java.simpleName)
                 .addToBackStack(fragment::class.java.simpleName)
                 .commit()
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 1) {
+           finish()
+        }
+        super.onBackPressed()
     }
 
 }
