@@ -1,26 +1,33 @@
 package pdp.va.com.personalgoal.repository
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import pdp.va.com.personalgoal.models.*
+import pdp.va.com.personalgoal.database.AppDatabase
+import pdp.va.com.personalgoal.models.Film
+import pdp.va.com.personalgoal.models.FilmDao
+import pdp.va.com.personalgoal.models.Response
+import pdp.va.com.personalgoal.models.Review
+import pdp.va.com.personalgoal.network.NetworkUtil
 import pdp.va.com.personalgoal.retrofit.IFilmAPI
 
 /** Repository for films and related data
  * This class hold the cache and API instances and decides what to use to provide data
  * */
-class FilmRepository private constructor(private val filmDao: FilmDao, private val filmAPI: IFilmAPI) {
+class FilmRepository private constructor(private val filmDao: FilmDao, private val filmAPI: IFilmAPI, private val context: Context) {
     companion object {
 
         // For Singleton instantiation
         @Volatile
         private var instance: FilmRepository? = null
 
-        fun getInstance(filmDao: FilmDao, filmAPI: IFilmAPI) =
+        fun getInstance(filmDao: FilmDao, filmAPI: IFilmAPI, context: Context) =
                 instance ?: synchronized(this) {
-                    instance ?: FilmRepository(filmDao, filmAPI).also { instance = it }
+                    instance ?: FilmRepository(filmDao, filmAPI, context).also { instance = it }
                 }
     }
 
@@ -31,9 +38,11 @@ class FilmRepository private constructor(private val filmDao: FilmDao, private v
      *
      */
     fun getFilms(): LiveData<List<Film>> {
-        // todo check if internet connection - api
-        // todo else = dao
-        return filmDao.getFilms()
+        if (NetworkUtil.isNetworkAvailable(context)) {
+                return requestFilms()
+        } else {
+            return filmDao.getFilms()
+        }
     }
 
     /**
@@ -60,4 +69,26 @@ class FilmRepository private constructor(private val filmDao: FilmDao, private v
         return liveReview
     }
 
+    private fun requestFilms(): LiveData<List<Film>> {
+        val liveFilmList: MutableLiveData<List<Film>> = MutableLiveData()
+
+        filmAPI.getUpcoming()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { pageFilms ->
+                    liveFilmList.value = pageFilms.movies
+                    insertInDB(pageFilms.movies)
+                }
+
+        return liveFilmList
+    }
+
+    private fun insertInDB(movies: List<Film>) {
+        Observable.just(movies)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe { movies ->
+                    AppDatabase.getInstance(context)?.filmDao()?.insertAllFilms(movies)
+                 }
+    }
 }

@@ -12,7 +12,7 @@ import pdp.va.com.personalgoal.viewmodels.FilmsListViewModelFactory
 object DIUtils {
 
     private fun getFilmRepository(context: Context): FilmRepository {
-        return getInstance(AppDatabase.getInstance(context)!!.filmDao(), getFilmAPI())
+        return getInstance(AppDatabase.getInstance(context)!!.filmDao(), getFilmAPI(), context)
     }
 
     private fun getFilmAPI(): IFilmAPI {

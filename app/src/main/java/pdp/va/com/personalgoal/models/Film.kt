@@ -25,10 +25,6 @@ data class Film(
         var originalLanguage: String,
         @SerializedName("original_title")
         var originalTitle: String,
-        @SerializedName("backdrop_path")
-        var backdropPath: String,
-        @SerializedName("adult")
-        var adult: Boolean,
         @SerializedName("overview")
         var overview: String,
         @SerializedName("release_date")

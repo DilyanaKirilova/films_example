@@ -2,7 +2,7 @@ package pdp.va.com.personalgoal.models
 
 import com.google.gson.annotations.SerializedName
 
-data class Result(
+data class PageFilms(
         @SerializedName("page")
         var page: Int,
         @SerializedName("total_results")
